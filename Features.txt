@@ -1,0 +1,128 @@
+================================================================================
+           MICRO-SOC - COMPILADO DETALLADO DE CARACTERÍSTICAS Y FUNCIONES
+================================================================================
+
+Este documento desglosa exhaustivamente cada módulo, componente y función de la 
+plataforma Micro-SOC, una herramienta táctica y modular de ciberseguridad para 
+PYMEs y auditores de TI.
+
+--------------------------------------------------------------------------------
+PARTE 1: PORTAL DE ACCESO Y AUTENTICACIÓN (LOGIN & REGISTRO)
+--------------------------------------------------------------------------------
+
+Ubicación del Componente: `/src/components/LoginRegister.tsx` y `/src/App.tsx`
+
+* Bloqueo Permanente de Navegación:
+  - Impide que cualquier usuario intente saltarse la autenticación modificando la URL o las variables de estado en bruto. Si no hay una sesión válida del navegador en LocalStorage, el sistema bloquea la pantalla enviando al usuario directamente al portal de accesos.
+
+* Formulario de Registro Estructurado:
+  - Recopila datos necesarios para auditoría y validez legal del reporte:
+    - Nombre del responsable directo del área de TI o de la oficina.
+    - Correo institucional de contacto.
+    - Cédula de Identidad o Número de Registro Comercial.
+    - Nombre de la Sucursal/Empresa (ej. "Panadería Sol").
+    - Contraseña cifrada en la base de datos simulada del cliente.
+  - Al presionar registrar, almacena al usuario de forma segura dentro del disco persistente del navegador y realiza un prellenado de campos de login inmediato.
+
+* Formulario de Inicio de Sesión Inteligente:
+  - Permite loguearse tanto con el Correo como con el Nombre ingresados.
+  - Detecta automáticamente el Rol de la Cuenta basándose en el tipo de usuario (por defecto "Auditor" para auditor@microsoc.com o "Cliente" para cuentas de PYMEs).
+
+--------------------------------------------------------------------------------
+PARTE 2: PORTAL INTERACTIVO DEL CLIENTE (ESTÉTICA CELESTE / CYAN)
+--------------------------------------------------------------------------------
+
+Ubicación del Componente: `/src/components/ClientHome.tsx`
+
+* 1. Dashboard de Métricas Rápidas:
+  - Cuatro paneles informativos dinámicos de consulta inmediata:
+    - Tickets Registrados: Contador total acumulado de incidentes enviados por la empresa.
+    - Resueltos/Recibidos: Suma de tickets atendidos por el área de auditoría.
+    - Pendientes/En Espera: Alertas que siguen activas o bajo re-evaluación técnica.
+    - Alertas Activas: Detalle visual animado en color cian indicando que la vigilancia digital está operando de forma normal.
+
+* 2. Generador de Tickets de Soporte:
+  - Campos blindados para evitar errores de redacción:
+    - Campo "Email de Contacto": Autocompletado y bloqueado con el correo de la sesión activa del usuario para garantizar trazabilidad.
+    - Selector "Tipo de Incidente": Menú desplegable predefinido que incluye:
+      * Sospecha de Phishing
+      * Alerta del Antivirus
+      * Falla de Conexión VPN
+      * Acceso No Autorizado
+      * Anomalía en Servidores
+      * Intento de Ingeniería Social
+    - Selector de Prioridad por Color:
+      * 🟢 Baja (Tareas de rutina o sospechas leves)
+      * 🟡 Media (Problemas que entorpecen la producción cotidiana)
+      * 🔴 Alta (Infección por Malware activo, hackeo o brecha crítica)
+    - Cuadro de Observaciones Validadas:
+      * Entrada interactiva para describir los acontecimientos en lenguaje natural.
+      * Validador dinámico que exige una explicación mínima de 10 caracteres antes de habilitar el botón de envío.
+
+* 3. SOC-BOT v1.4 (Asistente de Consulta Rápida):
+  - Consola estilo terminal con indicador dinámico de estado "ONLINE" guiado por un pulso verde.
+  - Analizador sintáctico integrado que reconoce palabras clave críticas ingresadas por el usuario:
+    - Si detecta palabras como "virus", "lento" o "popup", responde con instrucciones de aislamiento de hardware y antivirus.
+    - Si detecta "phishing", "correo" o "remitente", comparte la lista de chequeo para evaluar cabeceras falsas.
+    - Si detecta "vpn", "red" o "wifi", provee consejos sobre autenticación mutua y tunelización segura.
+    - Respuesta amigable predeterminada para términos fuera del diccionario táctico.
+
+* 4. Centro del FAQs con Buscador Integrado:
+  - Más de 15 guías redactadas profesionalmente en español sobre términos de informática forense y mitigación rápida de estafas.
+  - Barra de búsqueda reactiva: El listado se reorganiza instantáneamente letra por letra al filtrar por el título de la duda.
+  - Acordeón colapsable que ahorra espacio vertical abriendo solo la FAQ seleccionada.
+
+--------------------------------------------------------------------------------
+PARTE 3: MÓDULO DE AUDITORÍA Y PANEL DE STAFF (ESTÉTICA ÁMBAR / AMARILLA)
+--------------------------------------------------------------------------------
+
+Ubicación del Componente: `/src/components/AuditorHome.tsx`
+
+* 1. Panel de Control de Alertas Operativas:
+  - Tarjetas de resumen en la parte superior que indican con exactitud el volumen de casos pendientes y de mayor gravedad (críticos de prioridad Alta) que requieren atención inmediata.
+
+* 2. Navegador Multitarea por Pestañas Técnicas:
+  - Pestaña "Panel Activos": Muestra el listado de tickets en cola (Pendiente / Recibido) con su número único correlativo, ID de hardware, empresa de origen e incidentes.
+  - Pestaña "En Espera": Agrupa los reportes reservados que necesitan validaciones complejas o análisis de firma antivirus.
+  - Pestaña "Tickets Eliminados / Reclamados" (Papelera de Reciclaje):
+    - Almacena aquellos tickets descartados o falsas alarmas, impidiendo que se borren definitivamente al primer clic por error del técnico.
+
+* 3. Sistema Interactivos de Transición de Estados:
+  - Al hacer clic sobre cualquier ticket disponible en la tabla de activos o en espera, se despliega una Ficha de Expediente Digital que cuenta con tres operaciones simultáneas:
+    - Acción RECIBIR: Actualiza el estado a "recibido", automatizando la firma e indicando que el SOC está coordinando la solución.
+    - Acción EN ESPERA: Mueve el ticket a la lista de investigaciones especiales para evitar saturación de la cola principal.
+    - Acción ELIMINAR: Traslada el registro directamente a la papelera.
+
+* 4. Ficha de Expediente Digital del Caso (Visualizador Lateral):
+  - Provee todos los metadatos relevantes del ticket seleccionado:
+    - Nombre del responsable técnico solicitante.
+    - Identificador único UUID con función de copiado.
+    - Hora y fecha de presentación del reporte.
+    - Correo institucional completo del afectado.
+    - Visualización destacada de la prioridad de respuesta por color y texto.
+    - Cuadro de comentarios de la bitácora con los detalles provistos originalmente por la PYME.
+  - Módulo de Acuse de Recibo: Permite al auditor firmar digitalmente un certificado que confirma la apertura y compromiso de resolución del caso con un solo clic.
+
+* 5. Gestión del Historial de Eliminados (Papelera con Restauración):
+  - Tabla adaptada con selección individual por casillas (Checkboxes).
+  - Visualizador de Ficha Técnica para el Ticket Eliminado Seleccionado.
+  - Función de Restauración ("Mandar al Panel de Tickets"): Restablece el ticket al estado "Pendiente" y lo devuelve instantáneamente a la cola activa de trabajo si se confirma una reevaluación.
+  - Botón de Purga Física por Lotes: Elimina de manera definitiva múltiples registros de la base de datos local seleccionándolos y presionando el botón de destrucción de datos.
+  - Diálogo de Confirmación Seguro: Cuenta con un menú integrado con botones de aprobación verde (✔) y cancelación roja (❌) para resguardar la consistencia de los datos históricos.
+
+--------------------------------------------------------------------------------
+PARTE 4: DIRECTRICES DE DISEÑO ("SLEEK INTERFACE" CYBERPUNK THEME)
+--------------------------------------------------------------------------------
+
+Ubicación del Archivo: `/src/data/themes.ts`, `/src/index.css` y `/src/App.tsx`
+
+* Fondo Abisal Oscuro (Real-Black):
+  - Limita el cansancio visual del auditor que analiza pantallas durante largas jornadas nocturnas.
+* Patrón de Rejilla Radial de Puntos (Radial Dot Grid Overlay):
+  - Superposición geométrica sutil (con opacidad del 10%) que recrea la estética de un monitor militar de rastreo aéreo o radar de red.
+* Contraste y División de Identidad Social:
+  - Cliente (Cyan/Celeste): Trasmite un ambiente de soporte técnico automatizado y limpio.
+  - Auditor (Ámbar/Amarillo): Simula los viejos paneles de cableado táctico o terminales industriales de control de fallos.
+* Interfaz Bloqueada y Segura:
+  - Se eliminaron por completo las opciones de personalización manual e inestable de temas, garantizando que el diseño cyber permanezca estático, consistente y 100% fiel a las pautas de accesibilidad en cada rincón del sistema.
+================================================================================

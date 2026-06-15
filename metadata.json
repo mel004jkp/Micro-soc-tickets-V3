@@ -1,0 +1,6 @@
+{
+  "name": "Micro-SOC",
+  "description": "Plataforma de ciberseguridad y gestión de auditoría accesible para pequeñas y medianas empresas (SMEs).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Key, Eye, EyeOff, UserPlus, Factory, CreditCard, Mail, Sparkles, CheckCircle2, Database, Sliders } from 'lucide-react';
+import { Shield, Key, Eye, EyeOff, UserPlus, Factory, CreditCard, Mail, Sparkles, CheckCircle2, Database, Sliders, HelpCircle } from 'lucide-react';
 import { RegisteredUser, CyberpunkStyle, ThemeConfig } from '../types';
 import { isSupabaseConfigured, signInWithSupabase, signUpWithSupabase } from '../lib/supabase';
 
@@ -240,11 +240,11 @@ export default function LoginRegister({
         </p>
       </header>
 
-      {/* Main Container: Login and Registration */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      {/* Main Container: Centered Login without Registration */}
+      <div className="flex justify-center items-center">
         
         {/* LOGIN PORTAL CARD */}
-        <div id="login-card" className={`p-6 md:p-8 rounded-2xl border transition-all duration-300 ${theme.cardBg} ${theme.clientGlow}`}>
+        <div id="login-card" className={`w-full max-w-md p-6 md:p-8 rounded-2xl border transition-all duration-300 ${theme.cardBg} ${theme.clientGlow}`}>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold tracking-tight flex items-center space-x-2">
               <Key id="login-key-icon" className="w-5 h-5 text-cyan-400" />
@@ -363,139 +363,14 @@ export default function LoginRegister({
               </button>
             </div>
           </div>
-        </div>
 
-        {/* REGISTRATION CARD FOR NEW USERS */}
-        <div id="register-card" className={`p-6 md:p-8 rounded-2xl border transition-all duration-300 ${theme.cardBg} border-slate-800/85 shadow-sm`}>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold tracking-tight flex items-center space-x-2">
-              <UserPlus className="w-5 h-5 text-emerald-400" />
-              <span>Registrarse Nuevo Cliente</span>
-            </h2>
-            <span className="text-xs font-mono text-emerald-400/80 bg-emerald-950/40 px-2 py-1 rounded border border-emerald-500/20 font-bold">Nuevas PYMES</span>
+          {/* New User Support Message Link at the bottom of the login card */}
+          <div className="mt-6 pt-4 border-t border-slate-800/60 text-center">
+            <p className="text-xs text-slate-400 font-mono">
+              ¿Usuario Nuevo? <span className="text-cyan-400 font-bold hover:underline cursor-pointer">Contáctese con soporte</span>
+            </p>
           </div>
 
-          {/* Connection badge indicators */}
-          <div className="mb-6">
-            {supabaseActive ? (
-              <div className="flex items-center space-x-2 bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 p-2.5 rounded-xl font-mono text-[10.5px]">
-                <Database className="w-4 h-4 text-emerald-400 animate-pulse shrink-0" />
-                <div>
-                  <span className="font-bold uppercase block text-emerald-300">⚡ REGISTRO EN SUPABASE</span>
-                  <span className="text-[9px] text-slate-400 block lowercase leading-none">Crea usuarios reales en tu auth.users</span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2 bg-slate-950 border border-slate-800 text-slate-500 p-2.5 rounded-xl font-mono text-[10.5px]">
-                <Database className="w-4 h-4 shrink-0" />
-                <div>
-                  <span className="font-semibold block text-slate-400"> Almacenamiento Local Activo</span>
-                  <span className="text-[9px] text-slate-600 block leading-none">Cuentas guardadas en caché LocalStorage</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {regSuccess && (
-            <div id="register-success-box" className="mb-4 p-3.5 bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 rounded-xl text-xs flex items-start space-x-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <strong className="block font-medium">¡Registro exitoso!</strong>
-                <span>Se han cargado tus datos automáticamente en el login. Solo presiona "Iniciar Sesión Seguro" de arriba para ingresar.</span>
-              </div>
-            </div>
-          )}
-
-          {regError && (
-            <div id="register-error-box" className="mb-4 p-3 bg-red-950/60 border border-red-500/30 text-red-300 rounded-xl text-xs">
-              ⚠️ {regError}
-            </div>
-          )}
-
-          <form onSubmit={handleRegisterSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1 font-mono">NOMBRE COMPLETO</label>
-                <input
-                  type="text"
-                  id="reg-nombre"
-                  placeholder="Tu Nombre"
-                  className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                  value={regNombre}
-                  onChange={(e) => setRegNombre(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1 font-mono">CORREO ELECTRÓNICO</label>
-                <input
-                  type="email"
-                  id="reg-email"
-                  placeholder="correo@pyme.com"
-                  className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                  value={regEmail}
-                  onChange={(e) => setRegEmail(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1 font-mono">LOCAL O EMPRESA</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                    <Factory className="w-3.5 h-3.5" />
-                  </span>
-                  <input
-                    type="text"
-                    id="reg-empresa"
-                    placeholder="Nombre Comercial"
-                    className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                    value={regEmpresa}
-                    onChange={(e) => setRegEmpresa(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-medium text-slate-400 mb-1 font-mono">NÚMERO DE CÉDULA</label>
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                    <CreditCard className="w-3.5 h-3.5" />
-                  </span>
-                  <input
-                    type="text"
-                    id="reg-cedula"
-                    placeholder="9-999-9999"
-                    className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                    value={regCedula}
-                    onChange={(e) => setRegCedula(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1 font-mono">CONTRASEÑA DE ACCESO</label>
-              <input
-                type="password"
-                id="reg-password"
-                placeholder="Inserta contraseña segura"
-                className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                value={regPassword}
-                onChange={(e) => setRegPassword(e.target.value)}
-              />
-            </div>
-
-            <button
-              type="submit"
-              id="register-submit-btn"
-              className="w-full mt-2 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition duration-200 flex items-center justify-center space-x-1.5 cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 shrink-0" />
-              <span>Crear Cuenta PYME & Sincronizar</span>
-            </button>
-          </form>
         </div>
       </div>
 
